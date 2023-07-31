@@ -1,0 +1,86 @@
+/LangChainDemo.log
+
+.DS_Store
+*/.DS_Store
+
+# Ignore node_modules directory
+node_modules/
+
+# Ignore build output
+dist/
+build/
+out/
+
+# Ignore temporary files
+*.tmp
+*.temp
+*.log
+
+# Ignore IDE/Editor specific files
+.vscode/
+.idea/
+
+# Ignore OS-specific files
+Thumbs.db
+.DS_Store
+
+# Ignore configuration files with sensitive information (customize this for your needs)
+config.ini
+secrets.txt
+
+# Ignore environment files
+.env
+.env.local
+
+# Ignore compiled binaries and executables
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Ignore package lock files
+package-lock.json
+yarn.lock
+
+# Ignore cache directories
+.cache/
+.cached/
+
+# Ignore user-specific files
+*.history
+*.bash_history
+
+# Ignore backup files
+*.bak
+*.backup
+
+# Ignore files with API keys or sensitive information
+secrets.json
+
+# Ignore large media files (customize this for your needs)
+*.mp4
+*.mov
+*.avi
+
+# Ignore files generated during tests
+coverage/
+*.spec.ts
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore virtual environment directories (for Python)
+venv/
+env/
+.venv/
+
+# Ignore database files
+*.db
+*.sqlite
+
+# Ignore dependency directories (customize this for your needs)
+dependency-folder/
+
+
+# my test file
+bak/
