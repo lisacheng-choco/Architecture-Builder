@@ -1,0 +1,157 @@
+@startuml Analyzer
+
+class JobManager
+together {
+    class MemoryUsageDiffTask
+    class MemoryLeakDetectionTask
+    interface Task
+}
+class WorkerQueue
+class ThreadPool
+
+together {
+    class OsMetric
+    class DsaTelemetry
+    interface Dataset
+}
+
+class MemoryUsageDiffTask implements Task
+class MemoryLeakDetectionTask implements Task
+
+class OsMetric implements Dataset
+class DsaTelemetry implements Dataset
+
+
+class Result
+
+JobManager --> MemoryUsageDiffTask:use
+JobManager --> MemoryLeakDetectionTask:use
+JobManager --> WorkerQueue:use
+JobManager --> ThreadPool:use
+
+MemoryUsageDiffTask --> OsMetric:use
+MemoryUsageDiffTask --> DsaTelemetry:use
+MemoryUsageDiffTask --> Result:use
+
+MemoryLeakDetectionTask --> OsMetric:use
+MemoryLeakDetectionTask --> DsaTelemetry:use
+MemoryLeakDetectionTask --> Result:use
+
+Result --> ResultStatus:use
+Result --> Issue:use
+Result --> IssueSeverity:use
+
+class JobManager {
+    worker_queues:dict
+    thread_pools:dict
+
+    add_worker_queue_and_thread_pool(task_class):void
+    submit_job(data_uuid:string,task_config:dict):void
+    _create_task(analysis_item_name:string):Task
+    _submit_task_to_thread_pool(task_class,Task):void
+    shutdown():void
+}
+
+class WorkerQueue {
+    queue:list
+
+    put(task):void
+    get():void
+}
+
+class ThreadPool {
+    worker_queue:WorkerQueue
+    workers:list
+
+    __init__(worker_queue):void
+    _start_workers(num_of_worker_thread:int="3"):void
+    _worker():void
+    submit_task_to_worker_queue(task)
+    shutdown():void
+}
+
+interface Task {
+    data_uuid:String
+    process_name:string
+    metric_name:string
+    datataset_name:string
+    dataset_start_time:datetime
+    dataset_end_time:datetime
+    analysis_upper_boundary:integer
+    analysis_lower_boundary:integer
+
+    __init__(data_uuid,process_name,metric_name,datataset_name,dataset_start_time,dataset_end_time,analysis_upper_boundary,analysis_lower_boundary):void
+    _task_id():String
+    {abstract}tast_name(name:String):void
+    {abstract}execute():void
+}
+
+class MemoryUsageDiffTask {
+
+    tast_name("MemoryUsageDiff"):void
+    execute():void
+    _load_dataset(datataset_name,process_name,metric_name,dataset_start_time,dataset_end_time):Dataset
+    _analyze(Dataset,analysis_upper_boundary,analysis_lower_boundary):Result
+    _save_result(Result):void
+}
+
+class Result{
+    task_id:String
+    result:ResultStatus
+    issue:[Issue]
+    result_created_date:datetime
+    data_uuid:String
+    process_name:string
+    metric_name:string
+    datataset_name:string
+    dataset_start_time:datetime
+    dataset_end_time:datetime
+    analysis_upper_boundary:integer
+    analysis_lower_boundary:integer
+}
+class ResultStatus {
+    PASS:string="PASS"
+    FAILED:string="FAILED"
+}
+
+class Issue {
+    severity:IssueSeverity
+    description:String
+}
+
+class IssueSeverity {
+    P1:string="P1"
+    P2:string="P2"
+    P3:string="P3"
+}
+
+interface Dataset {
+    {abstract}datasource_path():void <<property>>
+    
+    metric():void <<property>>
+    start_time():void <<property>>
+    end_time():void <<property>>
+
+    metric(val:string):void <<setter>>
+    start_time(val:datetime):void <<setter>>
+    end_time(val:datetime):void <<setter>>
+
+    load():void
+    {abstract}filter():void
+}
+
+class OsMetric {
+    datasource_path:String
+    
+    datasource_path():String
+    filter():dataframe
+}
+
+class DsaTelemetry {
+    datasource_path:String
+    
+    datasource_path():String
+    filter():dataframe
+}
+
+@enduml

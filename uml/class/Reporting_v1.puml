@@ -1,0 +1,118 @@
+@startuml Analyzer
+class MemoryUsageDiff implements AnalysisItemBase
+class OsMetric implements DatasetBase
+class DsaTelemetry implements DatasetBase
+class AnalyzerExecutor "0" ->  "0..*" TaskCreator
+
+class AnalyzerExecutor {
+    dataset_config:object
+    testcase_config:object
+    status:String
+
+    run():void
+    _load_dataset():object
+    _run_testcase(testcase_name:String,data:dataframe):void
+}
+
+class TaskCreator {
+    + process_name:string
+    + counter_name:string
+    + dataset_name:string
+    + analysis_item_name:string
+    + analysis_upper_boundary:integer
+    + analysis_lower_boundary:integer
+    
+    + __init__(process_name,counter_name,dadataset_nametaset,analysis_item_name,analysis_upper_boundary,analysis_lower_boundary):void
+    + run():[Task]
+    + get_tasks():[Task]
+}
+
+class TaskImplemetor {
+    + task:Task
+    + result:Result
+
+    + __init__(task:Task):void
+    + run():Result
+    + get_result():Result
+    + save_result(result):void
+}
+
+class Task {
+    + process_name:string
+    + counter_name:string
+    + dataset_name:string
+    + dataset_start_time:datetime
+    + dataset_end_time:datetime
+    + analysis_item_name:string
+    + analysis_upper_boundary:integer
+    + analysis_lower_boundary:integer
+    + _task:Task
+    + _analysis_item:object
+    _ _dataset:object
+    
+    + __init__(process_name,counter_name,datataset_name,dataset_start_time,dataset_end_time,analysis_item_name,analysis_upper_boundary,analysis_lower_boundary):void
+    + create():Task
+    + get():Task
+    - _get_analysis_item_by_klass(analysis_item_name):AnalysisItem
+    - _get_dataset_by_klass(dataset_name,counter_name,dataset_start_time,dataset_end_time):Dataset
+}
+
+class Result {
+
+}
+
+interface Dataset {
+    {abstract}datasource_path():void <<property>>
+    
+    metric():void <<property>>
+    start_time():void <<property>>
+    end_time():void <<property>>
+
+    metric(val:string):void <<setter>>
+    start_time(val:datetime):void <<setter>>
+    end_time(val:datetime):void <<setter>>
+
+    load():void
+    {abstract}filter():void
+}
+
+class OsMetric {
+    datasource_path:String
+    
+    datasource_path():String
+    filter():dataframe
+}
+
+class DsaTelemetry {
+    datasource_path:String
+    
+    datasource_path():String
+    filter():dataframe
+}
+
+class AnalysisItem {
+
+}
+
+class MemoryUsageDiff {
+    name():String="MemoryUsageDiff"
+}
+
+interface AnalysisItemBase {
+    result:ResultBase
+
+    {abstract}name():void <<property>>
+    {abstract}data():void <<property>>
+
+    {abstract}run():ResultBase
+    save_result(adx_conn:object):void
+}
+
+interface ResultBase {
+
+}
+
+
+
+
+@enduml

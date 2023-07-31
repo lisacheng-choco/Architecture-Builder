@@ -1,0 +1,15 @@
+@startuml create_tasks_by_config
+start
+partition Initialization {
+    :read config files:
+    analysis_items_config, 
+    task_config,
+    datasource_config, 
+    adx_connection_config;
+    :create an instance of JobManager;
+    :JobManager.add_worker_queue_and_thread_pool() for item in analysis_items_config;
+}
+:JobManager.submit_job("123",task_config);
+:JobManager.shutdown();
+end
+@enduml
