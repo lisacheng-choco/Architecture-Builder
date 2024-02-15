@@ -14,7 +14,7 @@ from io import StringIO
 from dotenv import load_dotenv
 
 # Load the environment variables
-load_dotenv()
+load_dotenv(override=True)
 
 # Azure OpenAI key
 openai.api_type = os.getenv("OPENAI_API_TYPE")
@@ -86,7 +86,7 @@ open_ai_llm = AzureOpenAI(
     deployment_id=deployment_id,
     model_name=model_name,
     temperature=temperature,
-    max_tokens=max_tokens,
+    #max_tokens=max_tokens,
     top_p=top_p,
     frequency_penalty=frequency_penalty,
     presence_penalty=presence_penalty)
