@@ -1,4 +1,4 @@
-This is **Architecture Builder**, a Streamlit app that utilizes LangChain and Azure OpenAI LLM to generate code from the architecture design of system. It supports using UML CLASS diagrams into Python code.
+This is **Architecture Builder**, a Streamlit app that utilizes LangChain and Azure OpenAI to generate code from the architecture design of system. It supports using UML CLASS diagrams into Python code.
 
 This is a project to experiment that if it is possible to make developers more focus on system design by shortening time of coding with GPT's help, so that the developers can avoid underdesigned software applications in an Agile team. In this experiment, we use UML diagrams to represent system design.
 
